@@ -12,7 +12,8 @@ runs:
       run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
       id: branch
     - name: Checking out branch ${{ steps.branch.outputs.branch }}
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
+        fetch-depth: 0
         ref: ${{ steps.branch.outputs.branch }}
         fetch-tags: true
