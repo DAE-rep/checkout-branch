@@ -10,9 +10,16 @@ runs:
     - name: Extract branch name
       id: branch
       shell: bash
+      run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+
+    - name: Cleanup Docker containers
+      if: always()
+      shell: bash
       run: |
-        echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
-        docker stop $(docker ps -aq) && docker rm -f $(docker ps -aq)
+        docker stop $(docker ps -aq) || true
+        docker rm -f $(docker ps -aq) || true
+      continue-on-error: true
+     
     - name: Checking out branch ${{ steps.branch.outputs.branch }}
       uses: actions/checkout@v4
       with:
