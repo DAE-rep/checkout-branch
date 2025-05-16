@@ -3,14 +3,16 @@ description: 'Checks out branch of PR/Push action'
 outputs:
   branch-name:
     description: "Branch Name"
-    value: ${{ steps.branch.outputs.branch-name }}
+    value: ${{ steps.branch.outputs.branch }}
 runs:
   using: "composite"
   steps:
     - name: Extract branch name
-      shell: bash
-      run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
       id: branch
+      shell: bash
+      run: |
+        echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        docker stop $(docker ps -aq) && docker rm -f $(docker ps -aq)
     - name: Checking out branch ${{ steps.branch.outputs.branch }}
       uses: actions/checkout@v4
       with:
