@@ -12,6 +12,11 @@ runs:
       shell: bash
       run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
 
+    - name: Set COMPOSE_BAKE env var
+      shell: bash
+      run: echo "COMPOSE_BAKE=true" >> $GITHUB_ENV
+      continue-on-error: true
+     
     - name: Cleanup Docker containers
       if: always()
       shell: bash
@@ -19,7 +24,7 @@ runs:
         docker stop $(docker ps -aq) || true
         docker rm -f $(docker ps -aq) || true
       continue-on-error: true
-     
+
     - name: Checking out branch ${{ steps.branch.outputs.branch }}
       uses: actions/checkout@v4
       with:
