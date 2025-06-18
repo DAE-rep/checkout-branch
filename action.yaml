@@ -14,7 +14,7 @@ runs:
 
     - name: Set COMPOSE_BAKE env var
       shell: bash
-      run: echo "COMPOSE_BAKE=true" >> $GITHUB_ENV
+      run: echo "COMPOSE_BAKE=false" >> $GITHUB_ENV
       continue-on-error: true
      
     - name: Cleanup Docker containers
@@ -23,6 +23,7 @@ runs:
       run: |
         docker stop $(docker ps -aq) || true
         docker rm -f $(docker ps -aq) || true
+        docker compose down --rmi local || true
       continue-on-error: true
 
     - name: Checking out branch ${{ steps.branch.outputs.branch }}
