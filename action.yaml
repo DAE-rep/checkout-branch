@@ -27,7 +27,7 @@ runs:
       continue-on-error: true
 
     - name: Checking out branch ${{ steps.branch.outputs.branch }}
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         fetch-depth: 0
         ref: ${{ steps.branch.outputs.branch }}
